@@ -1,0 +1,12 @@
+APEX ORACLE PRO 3.0 — PHONE UPLOAD
+
+1. Download app.py from ChatGPT.
+2. Open GitHub → happysmile18-eng/apex-oracle.
+3. Tap Add file → Upload files.
+4. Select the new app.py.
+5. Confirm GitHub says app.py will be replaced.
+6. Tap Commit changes.
+7. Open the Streamlit site and wait for its automatic rebuild.
+8. At the top, confirm: Apex Oracle Pro · Version 3.0.0.
+
+Only reboot from Manage app if the old version is still displayed.
