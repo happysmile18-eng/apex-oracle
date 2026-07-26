@@ -1,61 +1,59 @@
-# Apex Oracle — F1 race predictor
+# Apex Oracle Pro 2.0
 
-A simple web app that:
+A complete Formula 1 race-ranking website built around **one learned model**: XGBoost LambdaMART (`rank:ndcg`). It ranks every driver from first to last and explains the strongest reasons behind each position.
 
-- detects the next Formula 1 race automatically;
-- loads historical results, current standings and qualifying from the public Jolpica F1 API;
-- trains a random-forest + logistic-regression ensemble;
-- lets you add weekend pace, upgrades, reliability and wet-weather knowledge;
-- runs 5,000–50,000 Monte Carlo simulations;
-- produces a winner, top-six probabilities and a biggest-surprise selection;
-- displays a forward, time-based winner backtest.
+## What is improved
 
-## Fastest way to run it
+- One true learning-to-rank model instead of mixing unrelated classifiers.
+- Sequential, leakage-safe features built before every historical race.
+- Driver and constructor Elo ratings.
+- Rolling form, qualifying, reliability, teammate and circuit features.
+- Automatic final starting grid from OpenF1 when available.
+- Automatic practice analysis: robust pace, long runs, tyre degradation and lap count.
+- Forward holdout test on the newest races.
+- Calibrated Monte Carlo probabilities.
+- Full ranking from P1 to last, plus winner, podium, top-six, DNF and expected finish.
+- XGBoost contribution explanations for every driver.
+- Timestamped JSON prediction receipt with SHA-256 fingerprint.
 
-1. Install Python 3.11 or newer.
-2. Open a terminal in this folder.
-3. Run:
+## Deploy on Streamlit Community Cloud
+
+Upload these items directly to the root of your GitHub repository:
+
+- `app.py`
+- `requirements.txt`
+- `README.md`
+- `.streamlit/config.toml` (optional styling)
+
+Then use:
+
+- Branch: `main`
+- Main file path: `app.py`
+
+## Local run
 
 ```bash
 python -m pip install -r requirements.txt
 streamlit run app.py
 ```
 
-The browser opens automatically.
+## How to use it
 
-## Free public hosting — Streamlit Community Cloud
+1. Select the next race.
+2. Wait for history/model loading.
+3. Verify the final grid after penalties.
+4. Leave manual adjustments at zero unless you have confirmed evidence.
+5. Set rain and safety-car probability.
+6. Generate the complete ranking.
+7. Download the timestamped prediction receipt before the race.
 
-1. Create a GitHub repository and upload this folder.
-2. Sign in to Streamlit Community Cloud with GitHub.
-3. Choose **New app**.
-4. Select the repository and set the main file to `app.py`.
-5. Deploy. No API key is required.
+## Honest accuracy statement
 
-Netlify cannot run this Python model directly. Streamlit Community Cloud, Render or Railway can.
+This is designed as a strong public-data model, but it is not honestly possible to call any new model “the world's most accurate” before it has accumulated a long, locked, live record. The app displays a forward historical holdout, and the receipt feature allows future predictions to be audited without editing them after the result.
 
-## Using it well
+## Data
 
-- Before qualifying, the app uses championship order as a provisional grid estimate.
-- After qualifying, reload the page; the official qualifying positions should populate automatically.
-- Correct the grid for penalties.
-- Use the manual adjustments only for confirmed information. `+1` should mean a meaningful but not enormous advantage; reserve `+3` for an exceptional signal.
-- The prediction is strongest after qualifying and before the race.
+- Jolpica: historical results, schedules, qualifying and standings.
+- OpenF1: starting grid, practice laps, stints and weather.
 
-## Model design
-
-The training set is created sequentially, so every row uses information available before that race. Features include grid, championship rank/share, recent driver and constructor results, points, win rate, reliability, circuit history and season progress.
-
-The app blends:
-
-- 62% balanced random forest;
-- 38% regularised logistic regression.
-
-The final race forecast applies optional weekend adjustments and simulates complete finishing orders with Gumbel/Plackett–Luce sampling. Rain and safety-car settings increase uncertainty.
-
-## Important limitation
-
-No public model can see private team simulations, exact fuel loads, setup compromises or last-minute technical failures. Treat probabilities as decision support, not guarantees.
-
-## Data and trademarks
-
-Race data comes from the open-source Jolpica F1 API. F1, Formula 1 and team/driver marks belong to their respective owners. This project is unofficial.
+This project is unofficial and is not associated with Formula 1, the FIA, Jolpica or OpenF1. Formula 1 names and marks belong to their owners.
